@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CATS 2026 — Culturally Responsive Chatbot Demo</title>
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --navy-light: #2C3F63;
+    --sand: #F5F0E8;
+    --sand-dark: #EDE7D9;
+    --terra: #C4623A;
+    --terra-light: #E8855E;
+    --sage: #5A8A6B;
+    --sage-light: #7AAD8A;
+    --white: #FFFFFF;
+    --text-dark: #1A1A1A;
+    --text-mid: #444;
+    --text-muted: #7A7A7A;
+    --border: rgba(27,42,74,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--sand);
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0 2rem;
+  }
+
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .conf-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    font-weight: normal;
+    line-height: 1.2;
+    max-width: 640px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: #A8C5D6;
+  }
+
+  .header-sub {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.25rem;
+    max-width: 560px;
+  }
+
+  .authors {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── DISCLAIMER BANNER ── */
+  .disclaimer {
+    background: #FFF8E7;
+    border-left: 4px solid #D4922A;
+    padding: 1rem 1.5rem;
+    margin: 0 auto;
+    max-width: 960px;
+    font-size: 0.84rem;
+    color: #5A4010;
+    line-height: 1.55;
+  }
+
+  .disclaimer strong { color: #3A2800; }
+
+  .disclaimer-wrap {
+    padding: 1.5rem 2rem 0;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terra);
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  h2 {
+    font-family: Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: normal;
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+  }
+
+  p { color: var(--text-mid); font-size: 0.95rem; margin-bottom: 0.75rem; }
+
+  /* ── INTRO SECTION ── */
+  .intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 640px) {
+    .intro { grid-template-columns: 1fr; }
+  }
+
+  .intro-text { }
+
+  .intro-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pill-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .pill-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .pill-icon.terra { background: #FBF0EB; }
+  .pill-icon.sage  { background: #EEF6F1; }
+  .pill-icon.navy  { background: #EBF0F8; }
+
+  .pill-card h3 { font-size: 0.88rem; font-weight: 600; color: var(--navy); margin-bottom: 0.25rem; }
+  .pill-card p  { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* ── VIGNETTE CARDS ── */
+  .vignettes-heading {
+    margin-bottom: 1.25rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 640px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(27,42,74,0.12);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    padding: 1.4rem 1.4rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-tag.cald  { color: var(--terra); }
+  .card-tag.first { color: var(--sage); }
+
+  .card h3 {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: normal;
+    color: var(--navy);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+
+  .card-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .card-body {
+    padding: 1rem 1.4rem 0.75rem;
+    flex: 1;
+  }
+
+  .card-body p { font-size: 0.84rem; color: var(--text-mid); margin: 0 0 0.75rem; }
+
+  .card-cue {
+    background: var(--sand);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.8rem;
+    color: var(--navy-light);
+    line-height: 1.45;
+  }
+
+  .card-cue strong { font-weight: 600; display: block; margin-bottom: 0.2rem; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+
+  .card-footer {
+    padding: 0.9rem 1.4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-footer span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .btn-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .btn-view.terra {
+    background: var(--terra);
+    color: var(--white);
+  }
+
+  .btn-view.terra:hover { background: #B3532C; }
+
+  .btn-view.sage {
+    background: var(--sage);
+    color: var(--white);
+  }
+
+  .btn-view.sage:hover { background: #4A7A5B; }
+
+  /* ── HOW TO READ ── */
+  .howto {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .howto h2 { margin-bottom: 1rem; }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+  }
+
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .dot-culture  { background: #3B7DD8; }
+  .dot-risk     { background: #C4623A; }
+  .dot-strength { background: #5A8A6B; }
+  .dot-guardrail{ background: #9B59B6; }
+  .dot-moment   { background: #D4922A; }
+
+  /* ── FRAMEWORK ── */
+  .framework {
+    margin-bottom: 0;
+  }
+
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .framework-grid { grid-template-columns: 1fr; }
+  }
+
+  .fw-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+  }
+
+  .fw-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+  .fw-card p  { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 1.5rem 2rem;
+    font-size: 0.78rem;
+  }
+
+  footer a { color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="conf-label">CATS 2026 · Design Research</span>
+    <h1>Operationalising <em>Cultural Responsiveness</em> in LLM-Based Role-Play</h1>
+    <p class="header-sub">A chatbot prototype for pre-service teacher education grounded in CRP scholarship and the AERO Cultural Safety Framework</p>
+    <p class="authors">Hanham et al. · Australian Catholic University · Western Sydney University</p>
+  </div>
+</header>
+
+<div class="disclaimer-wrap">
+  <div class="disclaimer">
+    <strong>⚠ Important disclaimer:</strong> These chatbot conversations present exemplars reflecting specific research-derived cross-cultural primary school classroom scenarios. They do not represent the universal experiences of all members of the cultural group/s represented. Individual experiences can, and often will, vary within cultural groups. Students from CALD backgrounds often navigate syncretic identities, blending multiple cultural influences in ways not captured here. Undue extrapolation risks overlooking cultural nuances and complexities.
+  </div>
+</div>
+
+<main>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="intro-text">
+      <p class="section-label">About this demo</p>
+      <h2>Practise, reflect, and develop cultural judgement</h2>
+      <p>Pre-service teachers often understand Culturally Responsive Pedagogy (CRP) in theory but lack opportunities to practise cultural judgement in realistic classroom contexts.</p>
+      <p>These two conversations demonstrate how the chatbot prototype simulates cross-cultural classroom scenarios, withholds the cultural explanation during the role-play (requiring the user to infer meaning), and provides structured feedback grounded in the AERO Cultural Safety Framework.</p>
+      <p>Click either vignette below to view the full conversation. These will be discussed live during the presentation.</p>
+    </div>
+    <div class="intro-cards">
+      <div class="pill-card">
+        <div class="pill-icon terra">🧠</div>
+        <div>
+          <h3>Conditional knowledge, not declarative</h3>
+          <p>The chatbot withholds the cultural explanation during role-play, requiring PSTs to develop inferential, situated judgment.</p>
+        </div>
+      </div>
+      <div class="pill-card">
+        <div class="pill-icon sage">🛡</div>
+        <div>
+          <h3>Guardrails prevent harm</h3>
+          <p>When teacher responses risk public shaming or deficit framing, the chatbot pauses and prompts reflection without revealing the cultural dynamic.</p>
+        </div>
+      </div>
+      <div class="pill-card">
+        <div class="pill-icon navy">📋</div>
+        <div>
+          <h3>AERO-grounded feedback</h3>
+          <p>Post-interaction feedback is structured around the AERO Cultural Safety Practice Guide (2025), not generic reflective prompts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- VIGNETTE CARDS -->
+  <div class="vignettes-heading">
+    <p class="section-label">Three classroom vignettes</p>
+    <h2>Select a conversation to view</h2>
+  </div>
+
+  <div class="cards">
+
+    <!-- AISHA -->
+    <a class="card" href="Aisha-Chat.html">
+      <div class="card-header">
+        <div class="card-tag cald">CALD Vignette</div>
+        <h3>Aisha — "The Silent Yes"</h3>
+        <p class="card-meta">Year 2 · Maths · Liverpool Public School · NSW</p>
+      </div>
+      <div class="card-body">
+        <p>Aisha, 7, is Syrian-Australian. When her teacher asks who knows how many sides a triangle has, she responds with a quiet "Um… yes…" and then falls completely silent.</p>
+        <div class="card-cue">
+          <strong>Cultural cue</strong>
+          In Arabic-speaking household contexts, "yes" often signals active listening, not a full answer. An explicit invitation to speak is required before the student feels permitted to contribute.
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>10 turns · Feedback included</span>
+        <span class="btn-view terra">View conversation →</span>
+      </div>
+    </a>
+
+    <!-- JARRAH -->
+    <a class="card" href="Jarrah-Chat.html">
+      <div class="card-header">
+        <div class="card-tag first">First Nations Vignette</div>
+        <h3>Jarrah — Peer Help-Seeking</h3>
+        <p class="card-meta">Year 4 · Maths · Mascot Public School · NSW</p>
+      </div>
+      <div class="card-body">
+        <p>Jarrah, 9, is Dharug Aboriginal Australian. During independent fraction work, he is observed three times in ten minutes leaning over to whisper to classmates and show his worksheet.</p>
+        <div class="card-cue">
+          <strong>Cultural cue</strong>
+          For many Aboriginal children, learning traditionally occurs through observation, collaboration, and peer-to-peer teaching within the kinship group. Seeking peer help is a culturally grounded strategy, not defiance.
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>12 turns · Feedback included</span>
+        <span class="btn-view sage">View conversation →</span>
+      </div>
+    </a>
+
+    <!-- AISHA 2 -->
+    <a class="card" href="AishaChat-2-negative.html">
+      <div class="card-header">
+        <div class="card-tag cald">CALD Vignette · Negative Response</div>
+        <h3>Aisha — Public Pressure and Chatbot Intervention</h3>
+        <p class="card-meta">Year 2 · Maths · Liverpool Public School · NSW</p>
+      </div>
+      <div class="card-body">
+        <p>The same scenario as Aisha's first conversation, but here the teacher continues to press Aisha publicly. The chatbot intervenes with feedback when the interaction risks causing cultural harm.</p>
+        <div class="card-cue">
+          <strong>Design feature</strong>
+          When the teacher's response risks public shaming, the chatbot breaks character and prompts the user to reflect — without revealing the cultural dynamic or suggesting an alternative response.
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>Feedback · Chatbot intervention</span>
+        <span class="btn-view terra">View conversation →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- HOW TO READ -->
+  <div class="howto">
+    <p class="section-label">Reading guide</p>
+    <h2>About these conversations</h2>
+    <p style="margin-bottom:1.2rem;">These conversations were used to test the chatbot prototype. The colour legend below reflects the annotation system used in the research — these will be discussed during the presentation.</p>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot dot-culture"></span><div><strong>Cultural cue</strong> — a moment where cultural background shapes the student's behaviour or communication</div></div>
+      <div class="legend-item"><span class="legend-dot dot-risk"></span><div><strong>Risk point</strong> — a teacher response that may inadvertently cause shame, disengagement, or cultural harm</div></div>
+      <div class="legend-item"><span class="legend-dot dot-strength"></span><div><strong>Strength</strong> — a culturally responsive move the teacher made that the AERO framework would commend</div></div>
+      <div class="legend-item"><span class="legend-dot dot-guardrail"></span><div><strong>Design guardrail</strong> — where the chatbot's system prompt constraints shaped the simulated student's response</div></div>
+      <div class="legend-item"><span class="legend-dot dot-moment"></span><div><strong>Teaching moment</strong> — a pivot point where the trajectory of the interaction shifted meaningfully</div></div>
+    </div>
+  </div>
+
+  <!-- FRAMEWORK -->
+  <section class="framework">
+    <p class="section-label">Theoretical grounding</p>
+    <h2>Three design decisions that make this culturally safe</h2>
+    <div class="framework-grid">
+      <div class="fw-card">
+        <h4>01 · Context engineering</h4>
+        <p>The chatbot draws only from a curated library of CRP scholarship — not LLM training defaults. Vignettes were developed through critical review of research on help-seeking in collectivist learning contexts.</p>
+      </div>
+      <div class="fw-card">
+        <h4>02 · System prompt design</h4>
+        <p>The cultural basis of each student's behaviour is withheld during role-play, requiring PSTs to infer meaning — developing conditional, not just declarative knowledge.</p>
+      </div>
+      <div class="fw-card">
+        <h4>03 · Interactional guardrails</h4>
+        <p>When a teacher response risks public shaming or deficit framing, the chatbot pauses role-play and prompts reflection — without revealing the underlying cultural dynamic.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  CATS 2026 · Hanham et al. · Grounded in: AERO Cultural Safety Practice Guide (March 2025) · Ladson-Billings (2008) · Sarra et al. (2020) · Perso (2020)
+</footer>
+
+</body>
+</html>
